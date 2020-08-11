@@ -3,7 +3,7 @@
 # Build this Dockerfile and tag as:
 # nvaitc/ai-lab:x.x-base
 
-FROM nvidia/cuda:10.1-cudnn7-runtime-ubuntu18.04 
+FROM nvidia/cuda:10.2-cudnn8-runtime-ubuntu18.04 
 
 LABEL maintainer="Timothy Liu <timothyl@nvidia.com>"
 
@@ -59,9 +59,6 @@ RUN apt-get update && \
     zlib1g-dev \
     patchelf \
     sudo \
-    && wget https://deeplearning-mat.s3-ap-southeast-1.amazonaws.com/datacenter-gpu-manager_1.7.2_amd64.deb \
-    && dpkg -i *.deb \
-    && rm *.deb \
     && apt-get purge jed -y \
     && apt-get autoremove -y \
     && apt-get clean && \
@@ -125,27 +122,23 @@ RUN cd /tmp/ && \
     pip install --no-cache-dir setuptools -U && \
     conda install --quiet --yes \
       -c nvidia -c numba -c pytorch -c conda-forge -c rapidsai -c defaults \
-      'python=3.6' \
+      'python=3.7' \
       'numpy' \
       'pandas' \
-      'cudatoolkit=10.1' \
+      'pytorch' \
+      'cudatoolkit=10.2' \
       'tk' \
       'tini' \
       'blas=*=openblas' && \
     conda install --quiet --yes \
-      'notebook=6.0.*' \
-      'jupyterhub=1.0.*' \
-      'jupyterlab=1.*' \
+      'notebook=6.1.*' \
+      'jupyterhub=1.1.*' \
+      'jupyterlab=2.2.*' \
       'widgetsnbextension' \
       'jupyter_contrib_nbextensions' \
       'ipywidgets=7.5.*' && \
     pip install --no-cache-dir -r $HOME/requirements.txt && \
     rm $HOME/requirements.txt && \
-    git clone --depth 1 https://github.com/huggingface/neuralcoref && \
-    cd neuralcoref && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir . && \
-    cd $HOME && \
     pip uninstall opencv-python opencv-contrib-python -y && \
     pip install --no-cache-dir opencv-contrib-python && \
     pip uninstall pillow -y && \
@@ -195,14 +188,14 @@ RUN cd /tmp/ && \
 USER root
 
 RUN cd /tmp/ && \
-    git clone --depth 1 https://github.com/Syllo/nvtop.git && \
-    mkdir -p nvtop/build && cd nvtop/build && \
-    cmake .. -DNVML_RETRIEVE_HEADER_ONLINE=True && \
-    make && make install && \
-    cd && \
-    rm -rf /tmp/* && \
-    rm -rf $HOME/.cache && \
-    rm -rf $HOME/.node-gyp && \
+    # git clone --depth 1 https://github.com/Syllo/nvtop.git && \
+    # mkdir -p nvtop/build && cd nvtop/build && \
+    # cmake .. -DNVML_RETRIEVE_HEADER_ONLINE=True && \
+    # make && make install && \
+    # cd && \
+    # rm -rf /tmp/* && \
+    # rm -rf $HOME/.cache && \
+    # rm -rf $HOME/.node-gyp && \
     fix-permissions $CONDA_DIR && \
     fix-permissions $HOME
 
@@ -232,7 +225,7 @@ USER root
 
 COPY ld.so.conf /etc/
 
-ENV NB_PASSWD="" \
+ENV NB_PASSWD_OLD="" \
     SUDO_PASSWD=volta
 
 RUN ldconfig && \

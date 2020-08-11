@@ -10,6 +10,7 @@ scikit-learn
 scikit-image
 h5py
 pytest
+torch>=1.6,<1.7
 nltk
 pydot
 pyyaml
@@ -21,6 +22,7 @@ imageio
 py3nvml
 pynvml
 GPUtil
+tensorflow
 librosa
 inflect
 unidecode

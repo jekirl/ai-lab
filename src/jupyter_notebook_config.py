@@ -12,11 +12,11 @@ c = get_config()
 c.NotebookApp.ip = "0.0.0.0"
 c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
-c.NotebookApp.token = ""
+# c.NotebookApp.token = ""
 c.NotebookApp.allow_origin = "*"
 
-nb_password = os.getenv("NB_PASSWD", "")
-c.NotebookApp.password = passwd(nb_password)
+# nb_password = os.getenv("NB_PASSWD", "")
+# c.NotebookApp.password = passwd(nb_password)
 
 c.FileContentsManager.delete_to_trash = False
 
